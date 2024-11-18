@@ -32,6 +32,7 @@ flowchart TD
 
 start["開始"]
 end1["終了"]
+num["nowの値をnumの値に置き換える"]
 in["ユーザーがHighかLowか選択"]
 if1["ユーザが選んだ選択肢(value)と結果が一致するか"]
 if2["現在の数(now)と次の数(num)が一致するか"]
@@ -45,13 +46,14 @@ start --> in
 in --> if1
 if1 -->|yes| win
 win --> win++
-win++ --> end1
+win++ --> num
 if1 -->|no| if2
 if2 --> |yes| draw
 if2 --> |no| lose
-draw --> end1
+draw --> num
 lose --> total++
-total++ --> end1
+total++ --> num
+num --> end1
 ```
 ## 隠蔽看破のプログラムについて
 
@@ -86,12 +88,14 @@ win["win"]
 win++["winとtotalのカウントを1プラス"]
 lose["lose"]
 total++["totalのみのカウントを1プラス"]
+num["beforeの値をnumの値に置き換える"]
 
 start --> if
 if -->|yes| win
 win --> win++
-win++ --> end1
+win++ --> num
 if -->|no| lose
 lose --> total++
-total++ --> end1
+total++ --> num
+num --> end1
 ```
