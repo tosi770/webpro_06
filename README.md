@@ -34,3 +34,9 @@ win --> end1
 if -->|no| lose
 lose --> end1
 ```
+
+```javasript
+「High & Low」
+1~10の数字がランダムで生成されて現在の数(now)として表示される．
+
+```

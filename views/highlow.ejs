@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>High & Low</title>
+</head>
+<body>
+    <p>High & Low</p>
+    <p>結果：<%= result %></p>
+    <p>現在の数は <%= now %> です。</p>
+    <hr>
+    <form action="/highlow" method="get">
+        <input type="radio" name="radio" id="high" value="1" required>
+        <label for="high">High</label><br>
+        
+        <input type="radio" name="radio" id="low" value="2">
+        <label for="low">Low</label><br>
+        
+        <input type="hidden" name="win" value="<%= win %>">
+        <input type="hidden" name="lose" value="<%= lose %>">
+        <input type="hidden" name="total" value="<%= total %>">
+        <input type="hidden" name="now" value="<%= now %>"> <!-- 現在の数を次に引き継ぐ -->
+        
+        <button type="submit">送信</button>
+    </form>
+    
+    <p>現在 <%= total %> 試合中 <%= win %> 勝 <%= lose %> 負 しています。</p>
+</body>
+</html>
