@@ -108,7 +108,6 @@ app.get("/inpeikanpa", (req, res) => {
 
   console.log({ win, total });
 
-  // `before` の処理
   let before = req.query.before !== undefined ? Number(req.query.before) : Math.floor(Math.random() * 5 + 1);
 
   // ラジオボタンの値を取得し、数値に変換
