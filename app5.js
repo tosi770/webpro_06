@@ -39,8 +39,6 @@ app.get("/janken", (req, res) => {
   else if( num==2 ) cpu = 'チョキ';
   else cpu = 'パー';
 
-  // ここに勝敗の判定を入れる
-
   if(( hand=='グー' && num==2)||(hand=='チョキ' && num==3)||(hand=='パー' && num==1)){
     judgement = '勝ち';
     win += 1;
@@ -61,19 +59,16 @@ app.get("/janken", (req, res) => {
 });
 
 app.get("/highlow", (req, res) => {
-  // クエリパラメータを取得し、既存の値があれば使用
   let win = Number(req.query.win) || 0;
   let lose = Number(req.query.lose) || 0;
   let total = Number(req.query.total) || 0;
   
-  // `now` の値がクエリパラメータで提供されていない場合、新しい数値を生成
   let now = req.query.now !== undefined ? Number(req.query.now) : Math.floor(Math.random() * 10 + 1);
   
-  const num = Math.floor(Math.random() * 10 + 1); // 比較用のランダムな数値
-  const value = req.query.radio; // ユーザーの選択肢 (高いか低いか)
+  const num = Math.floor(Math.random() * 10 + 1);
+  const value = req.query.radio;
   let result = '';
 
-  // ゲームのロジック
   if ((now > num && value == 2) || (now < num && value == 1)) {
     result = 'win';
     win++;
@@ -86,23 +81,19 @@ app.get("/highlow", (req, res) => {
     total++;
   }
 
-  // 次のゲーム用の新しい数値を生成
-  now = num;  // 次のリクエストで使用する新しい数値を now にセット
-
-  // 表示用のオブジェクトを設定
+  now = num;
   const display = {
     result: result,
     win: win,
     lose: lose,
     total: total,
-    now: now  // 新しい now を次のゲームに渡す
+    now: now 
   };
 
   res.render('highlow', display);
 });
 
 app.get("/inpeikanpa", (req, res) => {
-  // クエリから win と total を取得し、数値化。未定義の場合はデフォルト値 0 を設定。
   let win = Number(req.query.win) || 0;
   let total = Number(req.query.total) || 0;
 
@@ -110,36 +101,29 @@ app.get("/inpeikanpa", (req, res) => {
 
   let before = req.query.before !== undefined ? Number(req.query.before) : Math.floor(Math.random() * 5 + 1);
 
-  // ラジオボタンの値を取得し、数値に変換
   const value = Number(req.query.radio) || null;
 
-  // 結果を格納する変数
   let result = '';
 
-  // 比較用のランダムな数値を生成
   const num = Math.floor(Math.random() * 5 + 1);
 
-  // 勝敗判定
   if (value !== null && num === value) {
     result = 'win';
     win++;
   } else if (value !== null) {
     result = 'lose';
   }
-  total++; // 試行回数を増加
+  total++; 
 
-  // 次回用の値を設定
   before = num;
 
-  // 表示用オブジェクト
   const display = {
     result: result,
     win: win,
     total: total,
-    before: before, // 次回ゲームに渡す値
+    before: before, 
   };
 
-  // テンプレートをレンダリング
   res.render('inpeikanpa', display);
 });
 

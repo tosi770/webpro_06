@@ -40,7 +40,6 @@ flowchart TD
 
 start["開始"]
 end1["終了"]
-num["nowの値をnumの値に置き換える"]
 in1["ユーザーが｢グー｣｢チョキ｣｢パー｣のいずれかを入力(hand)"]
 in2["1~3からランダムで数を1つ生成し1をグー,2をチョキ,3をパーとする(num)"]
 if1["handが｢グー｣でnumが2 or handが｢チョキ｣でnumが3 or handが｢パー｣でnumが1であるか"]
