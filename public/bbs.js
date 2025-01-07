@@ -1,137 +1,167 @@
-"use strict";
+document.addEventListener("DOMContentLoaded", () => {
+    const bbsContainer = document.querySelector("#bbs");
+    const postButton = document.querySelector("#post");
+    const checkButton = document.querySelector("#check button"); // 投稿チェックボタンを取得
 
-let number=0;
-let posts = [];
-let postId = 1;
-const bbs = document.querySelector('#bbs');
-document.querySelector('#post').addEventListener('click', () => {
-    const name = document.querySelector('#name').value;
-    const message = document.querySelector('#message').value;
+    // 投稿データをHTMLに描画
+    const renderPosts = (messages, container) => {
+        container.innerHTML = ""; // コンテナをリセット
+        messages.forEach((post) => {
+            const postDiv = document.createElement("div");
+            postDiv.className = "cover";
 
-    const params = {  // URL Encode
-        method: "POST",
-        body: 'name=' + name + '&message=' + message,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
+            postDiv.innerHTML = `
+                <span class="post-id">#${post.id}</span>
+                <span class="name">${post.name}</span>: 
+                <span class="mes">${post.message}</span>
+                <button class="like-btn" data-id="${post.id}">いいね (${post.likes})</button>
+                <button class="reply-btn" data-id="${post.id}">返信</button>
+                <div class="replies">
+                    ${post.replies
+                        .map(
+                            (reply) => `
+                            <div class="reply">
+                                <span class="name">${reply.name}</span>: 
+                                <span class="mes">${reply.message}</span>
+                            </div>
+                        `
+                        )
+                        .join("")}
+                </div>
+            `;
+            container.appendChild(postDiv);
+        });
+
+        // いいねボタンのイベントリスナー
+        container.querySelectorAll(".like-btn").forEach((button) => {
+            button.removeEventListener("click", handleLike); // 古いリスナーを削除
+            button.addEventListener("click", handleLike);   // 新しいリスナーを追加
+        });
+
+        // 返信ボタンのイベントリスナー
+        container.querySelectorAll(".reply-btn").forEach((button) => {
+            button.removeEventListener("click", handleReply); // 古いリスナーを削除
+            button.addEventListener("click", handleReply);   // 新しいリスナーを追加
+        });
     };
-    console.log(params);
-    
-    const url = "/post";
-    fetch(url, params)
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error('Error');
-        }
-        return response.json();
-    })
-    .then((response) => {
-        console.log(response);
-        document.querySelector('#message').value = "";
 
-        // 投稿番号をインクリメント
-        number++;
-    });
-});
-
-
-document.querySelector('#check').addEventListener('click', () => {
-    const params = {  // URL Encode
-        method: "POST",
-        body:  '',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
+    // いいねボタンの処理
+    const handleLike = (event) => {
+        const postId = event.target.dataset.id;
+        fetch("/like", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `id=${postId}`,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    loadPosts(); // 再読み込みで更新
+                }
+            })
+            .catch((error) => {
+                console.error("いいねボタン処理でエラー:", error);
+                alert("エラー: いいね処理に失敗しました。");
+            });
     };
-    const url = "/check";
-    fetch( url, params )
-    .then( (response) => {
-        if( !response.ok ) {
-            throw new Error('Error');
-        }
-        return response.json();
-    })
-    .then( (response) => {
-        let value = response.number;
-        console.log( value );
 
-        console.log( number );
-        if( number != value ) {
-            const params = {
+    // 返信ボタンの処理
+    const handleReply = (event) => {
+        const postId = event.target.dataset.id;
+        const replyName = prompt("名前を入力してください:");
+        const replyMessage = prompt("返信メッセージを入力してください:");
+        if (replyName && replyMessage) {
+            fetch("/reply", {
                 method: "POST",
-                body: 'start='+number,
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'               
-                }
-            }
-            const url = "/read";
-            fetch( url, params )
-            .then( (response) => {
-                if( !response.ok ) {
-                    throw new Error('Error');
-                }
-                return response.json();
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `id=${postId}&name=${encodeURIComponent(replyName)}&message=${encodeURIComponent(replyMessage)}`,
             })
-            .then( (response) => {
-                number += response.messages.length;
-                for (let mes of response.messages) {
-                    console.log(mes); // 表示する投稿
-                
-                    let cover = document.createElement('div');
-                    cover.className = 'cover';
-                
-                    // 投稿番号を表示
-                    let id_area = document.createElement('span');
-                    id_area.className = 'post-id';
-                    id_area.innerText = `#${number + 1}: `;
-                
-                    let name_area = document.createElement('span');
-                    name_area.className = 'name';
-                    name_area.innerText = mes.name;
-                
-                    let mes_area = document.createElement('span');
-                    mes_area.className = 'mes';
-                    mes_area.innerText = mes.message;
-                
-                    // いいねボタン
-                    let like_btn = document.createElement('button');
-                    like_btn.className = 'like-btn';
-                    like_btn.innerText = 'いいね (0)';
-                    like_btn.dataset.id = number + 1;
-                    like_btn.addEventListener('click', () => {
-                        let likes = parseInt(like_btn.innerText.match(/\d+/)[0]) + 1;
-                        like_btn.innerText = `いいね (${likes})`;
-                    });
-                
-                    // 返信ボタン
-                    let reply_btn = document.createElement('button');
-                    reply_btn.className = 'reply-btn';
-                    reply_btn.innerText = '返信';
-                    reply_btn.dataset.id = number + 1;
-                    reply_btn.addEventListener('click', () => {
-                        const replyName = prompt('返信者の名前:');
-                        const replyMessage = prompt('返信メッセージ:');
-                        if (replyName && replyMessage) {
-                            let reply = document.createElement('div');
-                            reply.className = 'reply';
-                            reply.innerHTML = `
-                                ↳ <span class="name">${replyName}:</span>
-                                <span class="mes">${replyMessage}</span>
-                            `;
-                            cover.appendChild(reply);
-                        }
-                    });
-                
-                    // 各要素を投稿エリアに追加
-                    cover.appendChild(id_area);
-                    cover.appendChild(name_area);
-                    cover.appendChild(mes_area);
-                    cover.appendChild(like_btn);
-                    cover.appendChild(reply_btn);
-                
-                    bbs.appendChild(cover);
-                }                
-            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        loadPosts(); // 再読み込みで更新
+                    }
+                })
+                .catch((error) => {
+                    console.error("返信処理でエラー:", error);
+                    alert("エラー: 返信処理に失敗しました。");
+                });
         }
+    };
+
+    // 投稿の読み込み
+    const loadPosts = () => {
+        fetch("/read", {
+            method: "POST",
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.messages) {
+                    renderPosts(data.messages, bbsContainer); // 投稿一覧を描画
+                } else {
+                    console.error("サーバーから有効なデータが返されませんでした:", data);
+                }
+            })
+            .catch((error) => {
+                console.error("投稿データの取得に失敗しました:", error);
+                alert("投稿データの取得に失敗しました。");
+            });
+    };
+
+    // 投稿チェックのイベントリスナー
+    checkButton.addEventListener("click", () => {
+        let checkContainer = document.querySelector(".check-container");
+        if (!checkContainer) {
+            checkContainer = document.createElement("div");
+            checkContainer.className = "check-container";
+            document.body.appendChild(checkContainer);
+        }
+        checkContainer.innerHTML = `<h3>投稿チェック</h3>`;
+        
+        fetch("/read", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "start=0", // 必要なら適切なstart値を設定
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                renderPosts(data.messages, checkContainer);
+            })
+            .catch((error) => {
+                console.error("投稿チェックの取得に失敗しました:", error);
+                alert("投稿チェックの取得に失敗しました。");
+            });
     });
+
+    // 投稿の送信
+    postButton.addEventListener("click", () => {
+        const name = document.querySelector("#name").value;
+        const message = document.querySelector("#message").value;
+
+        fetch("/post", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `name=${encodeURIComponent(name)}&message=${encodeURIComponent(message)}`,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(`投稿が追加されました。現在の投稿数: ${data.number}`);
+                loadPosts(); // 投稿送信後に一覧を更新
+            })
+            .catch((error) => {
+                console.error("投稿の送信に失敗しました:", error);
+                alert("投稿の送信に失敗しました。");
+            });
+    });
+
+    // 初回読み込み
+    loadPosts();
 });

@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 
 let bbs = [];  // 本来はDBMSを使用するが，今回はこの変数にデータを蓄える
+let postCounter = 0; // 投稿番号を管理するカウンタ
 
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + "/public"));
@@ -99,58 +100,86 @@ app.post("/read", (req, res) => {
 app.post("/post", (req, res) => {
   const name = req.body.name;
   const message = req.body.message;
-  console.log( [name, message] );
-  // 本来はここでDBMSに保存する
-  bbs.push( { name: name, message: message } );
-  res.json( {number: bbs.length } );
-});
 
-// 投稿API
-app.post("/post", (req, res) => {
-  const name = req.body.name;
-  const message = req.body.message;
+  console.log(`[投稿追加] 番号: ${postCounter + 1}, 名前: ${name}, 内容: ${message}`);
+
+  // 投稿番号をインクリメントして設定
+  postCounter += 1;
+
+  // 新しい投稿を作成
   const newPost = {
-    id: bbs.length + 1, // 投稿番号
-    name: name,
-    message: message,
-    likes: 0, // いいね初期値
-    replies: [], // 返信リスト
+      id: postCounter, // 投稿番号
+      name: name || "匿名", // 名前（デフォルトは「匿名」）
+      message: message || "（メッセージなし）", // メッセージ（デフォルトは空）
+      likes: 0, // いいね数（初期値0）
+      replies: [], // 返信の初期化
   };
-  bbs.push(newPost);
+
+  bbs.push(newPost); // 配列に追加
+
+  // 正常なレスポンスを返す（/readはここで呼び出さない）
   res.json({ number: bbs.length });
 });
 
-// いいねAPI
-app.post("/like", (req, res) => {
-  const postId = Number(req.body.id);
-  const post = bbs.find(p => p.id === postId);
-  if (post) {
-    post.likes += 1;
-    res.json({ success: true, likes: post.likes });
-  } else {
-    res.json({ success: false, message: "Post not found." });
-  }
-});
 
-// 返信API
-app.post("/reply", (req, res) => {
-  const postId = Number(req.body.id);
-  const reply = {
-    name: req.body.name,
-    message: req.body.message,
-  };
-  const post = bbs.find(p => p.id === postId);
-  if (post) {
-    post.replies.push(reply);
-    res.json({ success: true, replies: post.replies });
-  } else {
-    res.json({ success: false, message: "Post not found." });
-  }
-});
-
-// 投稿一覧取得API
+// 投稿を取得するAPI（番号といいねを含めて返す）
 app.post("/read", (req, res) => {
-  res.json({ messages: bbs });
+  const start = Number(req.body.start) || 0; // startが無効な場合は0を使用
+  console.log("read -> " + start);
+
+  if (start < 0 || start >= bbs.length) {
+      // 範囲外の場合は全データを返す
+      res.json({ messages: bbs });
+  } else {
+      // 部分的なデータを返す（startからのスライス）
+      res.json({ messages: bbs.slice(start) });
+  }
+});
+
+
+
+app.post("/reply", (req, res) => {
+  const postId = Number(req.body.id); // 親投稿のID
+  const name = req.body.name || "匿名";
+  const message = req.body.message || "（メッセージなし）";
+
+  console.log(`[返信追加] 親投稿ID: ${postId}, 名前: ${name}, 内容: ${message}`);
+
+  // 親投稿を検索
+  const parentPost = bbs.find((post) => post.id === postId);
+
+  if (parentPost) {
+      // 返信を追加
+      const newReply = {
+          name: name,
+          message: message,
+      };
+      parentPost.replies.push(newReply);
+
+      console.log(`[返信成功] 親投稿ID: ${postId}, 現在の返信数: ${parentPost.replies.length}`);
+      res.json({ success: true });
+  } else {
+      console.log(`[返信失敗] 親投稿ID: ${postId}が見つかりません`);
+      res.status(404).json({ success: false, message: "Parent post not found" });
+  }
+});
+
+// いいねのカウントを更新するAPI（指定されたIDの投稿を更新）
+app.post("/like", (req, res) => {
+  const postId = Number(req.body.id); // 投稿IDを取得
+  console.log(`[いいね処理] 投稿ID: ${postId}`);
+
+  // 投稿を検索
+  const post = bbs.find((item) => item.id === postId);
+
+  if (post) {
+      post.likes += 1; // いいね数を増加
+      console.log(`[いいね成功] 投稿ID: ${postId}, 現在のいいね数: ${post.likes}`);
+      res.json({ success: true, likes: post.likes });
+  } else {
+      console.log(`[いいね失敗] 投稿ID: ${postId}が見つかりません`);
+      res.status(404).json({ success: false, message: "Post not found" });
+  }
 });
 
 app.listen(8080, () => console.log("Example app listening on port 8080!"));
