@@ -105,4 +105,52 @@ app.post("/post", (req, res) => {
   res.json( {number: bbs.length } );
 });
 
+// 投稿API
+app.post("/post", (req, res) => {
+  const name = req.body.name;
+  const message = req.body.message;
+  const newPost = {
+    id: bbs.length + 1, // 投稿番号
+    name: name,
+    message: message,
+    likes: 0, // いいね初期値
+    replies: [], // 返信リスト
+  };
+  bbs.push(newPost);
+  res.json({ number: bbs.length });
+});
+
+// いいねAPI
+app.post("/like", (req, res) => {
+  const postId = Number(req.body.id);
+  const post = bbs.find(p => p.id === postId);
+  if (post) {
+    post.likes += 1;
+    res.json({ success: true, likes: post.likes });
+  } else {
+    res.json({ success: false, message: "Post not found." });
+  }
+});
+
+// 返信API
+app.post("/reply", (req, res) => {
+  const postId = Number(req.body.id);
+  const reply = {
+    name: req.body.name,
+    message: req.body.message,
+  };
+  const post = bbs.find(p => p.id === postId);
+  if (post) {
+    post.replies.push(reply);
+    res.json({ success: true, replies: post.replies });
+  } else {
+    res.json({ success: false, message: "Post not found." });
+  }
+});
+
+// 投稿一覧取得API
+app.post("/read", (req, res) => {
+  res.json({ messages: bbs });
+});
+
 app.listen(8080, () => console.log("Example app listening on port 8080!"));
