@@ -24,6 +24,10 @@ let station2 = [
   { id:7, code:"JE18", name:"蘇我駅", change:"内房線，外房線", passengers:31328, distance:43.0 },
 ];
 
+let KingGnu = [
+  { id:1, release:"17.10"}
+]
+
 app.get("/keiyo", (req, res) => {
   res.render('db1', { data: station });
 });
