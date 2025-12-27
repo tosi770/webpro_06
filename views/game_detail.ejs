@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title><%= data.name %></title>
+  </head>
+  <body>
+    <h2><%= data.name %>の詳細</h2>
+    <table border="1" style="margin-bottom: 20px">
+      <tr>
+        <th>項目</th>
+        <th>データ</th>
+      </tr>
+      <tr>
+        <td>ID</td>
+        <td><%= data.id %></td>
+      </tr>
+      <tr>
+        <td>ゲーム名</td>
+        <td><%= data.name %></td>
+      </tr>
+      <tr>
+        <td>ジャンル</td>
+        <td><%= data.genre %></td>
+      </tr>
+      <tr>
+        <td>リリース日</td>
+        <td><%= data.release %></td>
+      </tr>
+      <tr>
+        <td>会社</td>
+        <td><%= data.company %></td>
+      </tr>
+    </table>
+
+    <div>
+      <a href="/game/edit/<%= id %>"><button>編集する</button></a>
+      <a
+        href="/game/delete/<%= id %>"
+        onclick="return confirm('本当に削除しますか？');"
+      >
+        <button style="color: red">削除する</button>
+      </a>
+      <span style="margin-left: 20px">
+        <a href="/game"><button>一覧に戻る</button></a>
+      </span>
+    </div>
+  </body>
+</html>
