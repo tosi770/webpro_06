@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>好きなラジオ番組一覧</title>
+  </head>
+  <body>
+    <h2>好きなラジオ番組一覧</h2>
+    <table border="1">
+      <tr>
+        <th>ID</th>
+        <th>番組名</th>
+        <th>放送局</th>
+        <th>詳細</th>
+      </tr>
+      <% let number = 0 %> <% for( let row of data ) { %>
+      <tr>
+        <td><%= row.id %></td>
+        <td><%= row.name %></td>
+        <td><%= row.station %></td>
+        <td>
+          <a href="/radio/<%= number %>"><button>詳細を見る</button></a>
+        </td>
+      </tr>
+      <% number += 1 %> <% } %>
+    </table>
+    <br />
+    <a href="/radio/create"
+      ><button style="padding: 10px 20px">＋ 新規追加</button></a
+    >
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title><%= data.name %>の編集</title>
+  </head>
+  <body>
+    <h2><%= data.name %>の編集</h2>
+    <form action="/kinggnu/update/<%= id %>" method="POST">
+      <table border="1" style="margin-bottom: 20px">
+        <tr>
+          <th>項目</th>
+          <th>データ</th>
+        </tr>
+        <tr>
+          <td>ID</td>
+          <td><%= data.id %></td>
+        </tr>
+        <tr>
+          <td>曲名</td>
+          <td><input type="text" name="name" value="<%= data.name %>" /></td>
+        </tr>
+        <tr>
+          <td>アルバム</td>
+          <td><input type="text" name="album" value="<%= data.album %>" /></td>
+        </tr>
+        <tr>
+          <td>タイアップ</td>
+          <td><input type="text" name="tieup" value="<%= data.tieup %>" /></td>
+        </tr>
+        <tr>
+          <td>リリース日</td>
+          <td>
+            <input type="text" name="release" value="<%= data.release %>" />
+          </td>
+        </tr>
+      </table>
+
+      <input type="submit" value="更新して保存" style="padding: 5px 15px" />
+
+      <a href="/kinggnu" style="margin-left: 10px">
+        <button type="button">一覧に戻る</button>
+      </a>
+    </form>
+  </body>
+</html>

@@ -26,19 +26,28 @@ let station2 = [
 ];
 
 let KingGnu = [
-  { id:1, name:"", album:"", tieup:"", release:""},
-  { id:2, name:"", album:"", tieup:"", release:""},
-  { id:3, name:"", album:"", tieup:"", release:""},
-
-]
+  { id:1, name:"AIZO", album:"single", tieup:"アニメ「呪術廻戦死滅回遊編」主題歌", release:"26'01'09"},
+  { id:2, name:"SO BAD", album:"single", tieup:"USJゾンビ・デ・ダンス テーマソング", release:"25'09'05"},
+  { id:3, name:"白日", album:"single", tieup:"ドラマ「イノセント冤罪弁護士」主題歌", release:"19'02'22"},
+  { id:4, name:"Sorrows", album:"Sympa", tieup:"「アサヒドライゼロスパーク」CMソング", release:"19'01'16"},
+  { id:5, name:"IKAROS", album:"THE GREATEST UNKNOWN", tieup:"なし", release:"23'11'29"},
+  { id:3, name:"サマーレイン・ダイバー", album:"Tokyo Rendez-Vous", tieup:"なし", release:"17'10'25"},
+];
 
 let radio = [
-  { id:1, name:"", day:"", time:"",personality:""},
-]
+  { id:1, name:"SPARK", station:"J-WAVE" ,day:"毎週火曜日", time:"24:00~",personality:"新井和輝"},
+  { id:2, name:"霜降り明星のオールナイトニッポン", station:"ニッポン放送" ,day:"毎週金曜日", time:"25:00~",personality:"霜降り明星"},
+  { id:3, name:"SixTONESのオールナイトニッポンサタデースペシャル", station:"ニッポン放送" ,day:"毎週土曜日", time:"23:30~",personality:"SixTONES(田中樹とランダムなメンバー1人)"},
+  { id:4, name:"オードリーのオールナイトニッポン", station:"ニッポン放送" ,day:"毎週土曜日", time:"25:00~",personality:"オードリー"},
+];
 
-let  =[
-  { id:1, name:"", a:""},
-]
+let game =[
+  { id:1, name:"原神", genre:"オープンワールド", release:"20'09'28", company:"miHoYo"},
+  { id:2, name:"崩壊スターレイル", genre:"ターン制コマンドバトル", release:"23'04'26", company:"miHoYo"},
+  { id:3, name:"ゼンレスゾーンゼロ", genre:"3Dアクション", release:"24'07'04", company:"miHoYo"},
+  { id:4, name:"モンスターハンターライズ", genre:"ハンティングアクション", release:"21'03'26", company:"CAPCOM"},
+  { id:5, name:"モンスターストライク", genre:"ひっぱりハンティング", release:"13'10'10", company:"MIXI"},
+];
 
 app.get("/keiyo", (req, res) => {
   res.render('db1', { data: station });
@@ -98,6 +107,139 @@ app.post("/keiyo2/update/:number", (req, res) =>{
   station2[req.params.number].distance = req.body.distance;
   console.log( station2 );
   res.redirect('/keiyo2' );
+});
+// 1.King Gnu -------------------------------------------
+app.get("/kinggnu", (req, res) => {
+  res.render('kinggnu', { data: KingGnu });
+});
+
+app.get("/kinggnu/create", (req, res)=>{
+  res.redirect('/public/kinggnu_new.html');
+});
+
+app.post("/kinggnu", (req, res) => {
+  const id = KingGnu.length + 1;
+  const name = req.body.name;
+  const album = req.body.album;
+  const tieup = req.body.tieup;
+  const release = req.body.release;
+  KingGnu.push( { id: id, name: name, album: album, tieup: tieup, release: release } );
+  res.render('kinggnu', {data: KingGnu} );
+});
+
+app.get("/kinggnu/:number", (req, res) => {
+  const number = req.params.number;
+  const detail = KingGnu[ number ];
+  res.render('kinggnu_detail', {id: number, data: detail} );
+});
+
+app.get("/kinggnu/delete/:number", (req, res) => {
+  KingGnu.splice( req.params.number, 1 );
+  res.redirect('/kinggnu' );
+});
+
+app.get("/kinggnu/edit/:number", (req, res) => {
+  const number = req.params.number;
+  const detail = KingGnu[ number ];
+  res.render('kinggnu_edit', {id: number, data: detail} );
+});
+
+app.post("/kinggnu/update/:number", (req, res) =>{
+  KingGnu[req.params.number].name = req.body.name;
+  KingGnu[req.params.number].album = req.body.album;
+  KingGnu[req.params.number].tieup = req.body.tieup;
+  KingGnu[req.params.number].release = req.body.release;
+  res.redirect('/kinggnu' );
+});
+
+// 2.radio-------------------------------------------
+app.get("/radio", (req, res) => {
+  res.render('radio', { data: radio });
+});
+
+app.get("/radio/create", (req, res)=>{
+  res.redirect('/public/radio_new.html');
+});
+
+app.post("/radio", (req, res) => {
+  const id = radio.length + 1;
+  const name = req.body.name;
+  const stationName = req.body.station;
+  const day = req.body.day;
+  const time = req.body.time;
+  const personality = req.body.personality;
+  radio.push( { id: id, name: name, station: stationName, day: day, time: time, personality: personality } );
+  res.render('radio', {data: radio} );
+});
+
+app.get("/radio/:number", (req, res) => {
+  const number = req.params.number;
+  const detail = radio[ number ];
+  res.render('radio_detail', {id: number, data: detail} );
+});
+
+app.get("/radio/delete/:number", (req, res) => {
+  radio.splice( req.params.number, 1 );
+  res.redirect('/radio' );
+});
+
+app.get("/radio/edit/:number", (req, res) => {
+  const number = req.params.number;
+  const detail = radio[ number ];
+  res.render('radio_edit', {id: number, data: detail} );
+});
+
+app.post("/radio/update/:number", (req, res) =>{
+  radio[req.params.number].name = req.body.name;
+  radio[req.params.number].station = req.body.station;
+  radio[req.params.number].day = req.body.day;
+  radio[req.params.number].time = req.body.time;
+  radio[req.params.number].personality = req.body.personality;
+  res.redirect('/radio' );
+});
+
+// 3.game-------------------------------------------
+app.get("/game", (req, res) => {
+  res.render('game', { data: game });
+});
+
+app.get("/game/create", (req, res)=>{
+  res.redirect('/public/game_new.html');
+});
+
+app.post("/game", (req, res) => {
+  const id = game.length + 1;
+  const name = req.body.name;
+  const genre = req.body.genre;
+  const release = req.body.release;
+  const company = req.body.company;
+  game.push( { id: id, name: name, genre: genre, release: release, company: company } );
+  res.render('game', {data: game} );
+});
+
+app.get("/game/:number", (req, res) => {
+  const number = req.params.number;
+  const detail = game[ number ];
+  res.render('game_detail', {id: number, data: detail} );
+});
+
+app.get("/game/delete/:number", (req, res) => {
+  game.splice( req.params.number, 1 );
+  res.redirect('/game' );
+});
+
+app.get("/game/edit/:number", (req, res) => {
+  const number = req.params.number;
+  const detail = game[ number ];
+  res.render('game_edit', {id: number, data: detail} );
+});
+
+app.post("/game/update/:number", (req, res) =>{
+  game[req.params.number].name = req.body.name;
+  game[req.params.number].genre = req.body.genre;
+  game[req.params.number].release = req.body.release;
+  game[req.params.number].company = req.body.company;
+  res.redirect('/game' );
 });
 
 app.get("/keiyo_add", (req, res)=> {
