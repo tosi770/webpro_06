@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>曲の追加</title>
+  </head>
+  <body>
+    <h2>King Gnu 新規登録</h2>
+    <form action="/kinggnu" method="POST">
+      <input type="text" name="name" required />
+      <label for="name">曲名:</label><br />
+
+      <input type="text" name="album" required />
+      <label for="album">アルバム:</label><br />
+
+      <input type="text" name="tieup" />
+      <label for="tieup">タイアップ:</label><br />
+
+      <input type="text" name="release" required />
+      <label for="release">リリース日:</label><br />
+
+      <input type="submit" value="登録" />
+    </form>
+    <br />
+    <a href="/kinggnu">一覧に戻る</a>
+  </body>
+</html>

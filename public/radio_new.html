@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>番組の追加</title>
+  </head>
+  <body>
+    <h2>ラジオ番組 新規登録</h2>
+    <form action="/radio" method="POST">
+      <input type="text" name="name" required />
+      <label for="name">番組名:</label><br />
+
+      <input type="text" name="station" required />
+      <label for="station">放送局:</label><br />
+
+      <input type="text" name="day" />
+      <label for="day">放送日:</label><br />
+
+      <input type="text" name="time" />
+      <label for="time">時間:</label><br />
+
+      <input type="text" name="personality" />
+      <label for="personality">パーソナリティ:</label><br />
+
+      <input type="submit" value="登録" />
+    </form>
+    <br />
+    <a href="/radio">一覧に戻る</a>
+  </body>
+</html>

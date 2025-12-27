@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ゲームの追加</title>
+  </head>
+  <body>
+    <h2>ゲーム 新規登録</h2>
+    <form action="/game" method="POST">
+      <input type="text" name="name" required />
+      <label for="name">ゲーム名:</label><br />
+
+      <input type="text" name="genre" required />
+      <label for="genre">ジャンル:</label><br />
+
+      <input type="text" name="release" />
+      <label for="release">リリース日:</label><br />
+
+      <input type="text" name="company" />
+      <label for="company">会社:</label><br />
+
+      <input type="submit" value="登録" />
+    </form>
+    <br />
+    <a href="/game">一覧に戻る</a>
+  </body>
+</html>
