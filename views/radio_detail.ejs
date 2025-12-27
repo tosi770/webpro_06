@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title><%= data.name %></title>
+  </head>
+  <body>
+    <h2><%= data.name %>の詳細</h2>
+    <table border="1" style="margin-bottom: 20px">
+      <tr>
+        <th>項目</th>
+        <th>データ</th>
+      </tr>
+      <tr>
+        <td>ID</td>
+        <td><%= data.id %></td>
+      </tr>
+      <tr>
+        <td>番組名</td>
+        <td><%= data.name %></td>
+      </tr>
+      <tr>
+        <td>放送局</td>
+        <td><%= data.station %></td>
+      </tr>
+      <tr>
+        <td>放送日</td>
+        <td><%= data.day %></td>
+      </tr>
+      <tr>
+        <td>時間</td>
+        <td><%= data.time %></td>
+      </tr>
+      <tr>
+        <td>パーソナリティ</td>
+        <td><%= data.personality %></td>
+      </tr>
+    </table>
+
+    <div>
+      <a href="/radio/edit/<%= id %>"><button>編集する</button></a>
+      <a
+        href="/radio/delete/<%= id %>"
+        onclick="return confirm('本当に削除しますか？');"
+      >
+        <button style="color: red">削除する</button>
+      </a>
+      <span style="margin-left: 20px">
+        <a href="/radio"><button>一覧に戻る</button></a>
+      </span>
+    </div>
+  </body>
+</html>

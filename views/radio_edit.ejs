@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>編集</title>
+  </head>
+  <body>
+    <h2><%= data.name %>の編集</h2>
+    <form action="/radio/update/<%= id %>" method="POST">
+      <table border="1" style="margin-bottom: 20px">
+        <tr>
+          <th>項目</th>
+          <th>データ</th>
+        </tr>
+        <tr>
+          <td>ID</td>
+          <td><%= data.id %></td>
+        </tr>
+        <tr>
+          <td>番組名</td>
+          <td><input type="text" name="name" value="<%= data.name %>" /></td>
+        </tr>
+        <tr>
+          <td>放送局</td>
+          <td>
+            <input type="text" name="station" value="<%= data.station %>" />
+          </td>
+        </tr>
+        <tr>
+          <td>放送日</td>
+          <td><input type="text" name="day" value="<%= data.day %>" /></td>
+        </tr>
+        <tr>
+          <td>時間</td>
+          <td><input type="text" name="time" value="<%= data.time %>" /></td>
+        </tr>
+        <tr>
+          <td>パーソナリティ</td>
+          <td>
+            <input
+              type="text"
+              name="personality"
+              value="<%= data.personality %>"
+            />
+          </td>
+        </tr>
+      </table>
+      <input type="submit" value="更新して保存" style="padding: 5px 15px" />
+      <a href="/radio" style="margin-left: 10px">
+        <button type="button">一覧に戻る</button>
+      </a>
+    </form>
+  </body>
+</html>
