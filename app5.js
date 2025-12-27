@@ -1,4 +1,5 @@
 "use strict";
+const { name } = require("ejs");
 const express = require("express");
 const app = express();
 
@@ -25,7 +26,18 @@ let station2 = [
 ];
 
 let KingGnu = [
-  { id:1, release:"17.10"}
+  { id:1, name:"", album:"", tieup:"", release:""},
+  { id:2, name:"", album:"", tieup:"", release:""},
+  { id:3, name:"", album:"", tieup:"", release:""},
+
+]
+
+let radio = [
+  { id:1, name:"", day:"", time:"",personality:""},
+]
+
+let  =[
+  { id:1, name:"", a:""},
 ]
 
 app.get("/keiyo", (req, res) => {
