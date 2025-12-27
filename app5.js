@@ -31,7 +31,7 @@ let KingGnu = [
   { id:3, name:"白日", album:"single", tieup:"ドラマ「イノセント冤罪弁護士」主題歌", release:"19'02'22"},
   { id:4, name:"Sorrows", album:"Sympa", tieup:"「アサヒドライゼロスパーク」CMソング", release:"19'01'16"},
   { id:5, name:"IKAROS", album:"THE GREATEST UNKNOWN", tieup:"なし", release:"23'11'29"},
-  { id:3, name:"サマーレイン・ダイバー", album:"Tokyo Rendez-Vous", tieup:"なし", release:"17'10'25"},
+  { id:6, name:"サマーレイン・ダイバー", album:"Tokyo Rendez-Vous", tieup:"なし", release:"17'10'25"},
 ];
 
 let radio = [
