@@ -5,6 +5,7 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + "/public"));
+app.use(express.urlencoded({ extended: true }));
 
 let station = [
   { id:1, code:"JE01", name:"東京駅"},
@@ -141,6 +142,9 @@ app.get("/kinggnu/delete/:number", (req, res) => {
 app.get("/kinggnu/edit/:number", (req, res) => {
   const number = req.params.number;
   const detail = KingGnu[ number ];
+  if (!detail) {
+      return res.redirect('/kinggnu');
+  }
   res.render('kinggnu_edit', {id: number, data: detail} );
 });
 
@@ -186,6 +190,9 @@ app.get("/radio/delete/:number", (req, res) => {
 app.get("/radio/edit/:number", (req, res) => {
   const number = req.params.number;
   const detail = radio[ number ];
+  if (!detail) {
+      return res.redirect('/radio');
+  }
   res.render('radio_edit', {id: number, data: detail} );
 });
 
@@ -231,6 +238,9 @@ app.get("/game/delete/:number", (req, res) => {
 app.get("/game/edit/:number", (req, res) => {
   const number = req.params.number;
   const detail = game[ number ];
+  if (!detail) {
+      return res.redirect('/game');
+  }
   res.render('game_edit', {id: number, data: detail} );
 });
 
