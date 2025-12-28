@@ -135,7 +135,12 @@ app.get("/kinggnu/:number", (req, res) => {
 });
 
 app.get("/kinggnu/delete/:number", (req, res) => {
-  KingGnu.splice( req.params.number, 1 );
+if(KingGnu[req.params.number]) {
+      KingGnu.splice(req.params.number, 1);
+      KingGnu.forEach((item, index) => {
+          item.id = index + 1;
+      });
+  }
   res.redirect('/kinggnu' );
 });
 
@@ -183,7 +188,12 @@ app.get("/radio/:number", (req, res) => {
 });
 
 app.get("/radio/delete/:number", (req, res) => {
-  radio.splice( req.params.number, 1 );
+if(radio[req.params.number]) {
+      radio.splice(req.params.number, 1);
+      radio.forEach((item, index) => {
+          item.id = index + 1;
+      });
+  }
   res.redirect('/radio' );
 });
 
@@ -231,7 +241,12 @@ app.get("/game/:number", (req, res) => {
 });
 
 app.get("/game/delete/:number", (req, res) => {
-  game.splice( req.params.number, 1 );
+if(game[req.params.number]) {
+      game.splice(req.params.number, 1);
+      game.forEach((item, index) => {
+          item.id = index + 1;
+      });
+  }
   res.redirect('/game' );
 });
 
